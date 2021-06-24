@@ -12,7 +12,7 @@ public class CommonUtil {
         try{
             sleep(delayMilliSeconds);
         }catch (Exception e){
-            LoggerUtil.log("Exception is :" + e.getMessage());
+            LoggerUtil.mylog("Exception is :" + e.getMessage());
         }
 
     }

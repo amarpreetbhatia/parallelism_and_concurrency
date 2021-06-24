@@ -5,7 +5,7 @@ import com.amarpreet.domain.ProductInfo;
 import com.amarpreet.domain.Review;
 
 import static com.amarpreet.util.CommonUtil.stopWatch;
-import static com.amarpreet.util.LoggerUtil.log;
+import static com.amarpreet.util.LoggerUtil.mylog;
 
 public class ProductService {
     private ProductInfoService productInfoService;
@@ -23,7 +23,7 @@ public class ProductService {
         Review review = reviewService.retrieveReviews(productId); // blocking call
 
         stopWatch.stop();
-        log("Total Time Taken : "+ stopWatch.getTime());
+        mylog("Total Time Taken : "+ stopWatch.getTime());
         return new Product(productId, productInfo, review);
     }
 
@@ -33,6 +33,6 @@ public class ProductService {
         ProductService productService = new ProductService(productInfoService, reviewService);
         String productId = "ABC123";
         Product product = productService.retrieveProductDetails(productId);
-        log("Product is " + product);
+        mylog("Product is " + product);
     }
 }

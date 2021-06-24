@@ -7,7 +7,7 @@ import com.amarpreet.service.ProductInfoService;
 import com.amarpreet.service.ReviewService;
 
 import static com.amarpreet.util.CommonUtil.stopWatch;
-import static com.amarpreet.util.LoggerUtil.log;
+import static com.amarpreet.util.LoggerUtil.mylog;
 
 public class ProductServiceThread {
     private ProductInfoService productInfoService;
@@ -37,7 +37,7 @@ public class ProductServiceThread {
         Review review =  reviewRunnable.getReview();
 
         stopWatch.stop();
-        log("Total Time Taken : "+ stopWatch.getTime());
+        mylog("Total Time Taken : "+ stopWatch.getTime());
         return new Product(productId, productInfo, review);
     }
 
@@ -47,7 +47,7 @@ public class ProductServiceThread {
         ProductServiceThread productService = new ProductServiceThread(productInfoService, reviewService);
         String productId = "ABC123";
         Product product = productService.retrieveProductDetails(productId);
-        log("Product is " + product);
+        mylog("Product is " + product);
     }
 
     private class ProductInfoServiceRunnable implements Runnable {
