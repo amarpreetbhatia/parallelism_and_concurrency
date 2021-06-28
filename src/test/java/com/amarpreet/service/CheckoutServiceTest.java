@@ -28,6 +28,7 @@ class CheckoutServiceTest {
        CheckoutResponse response = checkoutService.checkout(cart);
         //then
         assertEquals(CheckoutStatus.SUCCESS,response.getCheckoutStatus());
+        assertTrue(response.getFinalPrice() > 0.0);
     }
 
     @Test

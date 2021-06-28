@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.amarpreet.util.CommonUtil.startTimer;
 import static com.amarpreet.util.CommonUtil.timeTaken;
+import static java.util.stream.Collectors.summingDouble;
 
 public class CheckoutService {
 
@@ -34,8 +35,25 @@ public class CheckoutService {
         if(priceValidationList.size() > 0){
             return new CheckoutResponse(CheckoutStatus.FAILURE, priceValidationList);
         }
+//        double finalPrice = calculateFinalPrice(cart);
+        double finalPrice = calculateFinalPrice_reduce(cart);
         timeTaken();
-        return new CheckoutResponse(CheckoutStatus.SUCCESS);
+        System.out.println("finalPrice = " + finalPrice);
+        return new CheckoutResponse(CheckoutStatus.SUCCESS,finalPrice);
+    }
+
+    private double calculateFinalPrice(Cart cart) {
+        return cart.getCartItemList()
+                .stream()
+                .map(cartItem -> cartItem.getQuantity() * cartItem.getRate())
+                .collect(summingDouble(Double::doubleValue));
+    }
+
+    private double calculateFinalPrice_reduce(Cart cart) {
+        return cart.getCartItemList()
+                .stream()
+                .map(cartItem -> cartItem.getQuantity() * cartItem.getRate())
+                .reduce(0.0, (x,y) -> x+y);
     }
 
 }
