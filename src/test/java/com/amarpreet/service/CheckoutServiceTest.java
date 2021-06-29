@@ -7,6 +7,7 @@ import com.amarpreet.forkjoin.DataSet;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,6 +34,9 @@ class CheckoutServiceTest {
 
     @Test
     void checkout_with_25_items(){
+        System.out.println("Number of Parallelism:::->" + ForkJoinPool.getCommonPoolParallelism());
+        // *** Override ForkJoin Parallel stream
+        //System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "100");
             //given
             Cart cart = DataSet.createCart(25);
             //when
