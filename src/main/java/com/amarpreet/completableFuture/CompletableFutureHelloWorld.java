@@ -96,4 +96,14 @@ public class CompletableFutureHelloWorld {
     }
 
 
+    // thenCompose is a **** depended Task ****,
+    // it wait for the input
+    public CompletableFuture<String> helloString_with_ThenCompose() {
+        return CompletableFuture
+                .supplyAsync(helloWorldService::hello)
+                .thenCompose((prevResult) -> helloWorldService.worldFuture(prevResult))
+                .thenApply(String::toUpperCase);
+    }
+
+
 }

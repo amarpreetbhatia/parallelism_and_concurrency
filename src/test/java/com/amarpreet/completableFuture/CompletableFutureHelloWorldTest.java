@@ -55,4 +55,18 @@ class CompletableFutureHelloWorldTest {
         String result = completableFutureHelloWorld.helloWorld_with_4_async();
         assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE BYE!", result);
     }
+
+    @Test
+    void helloString_with_ThenCompose() {
+        long startTime = System.currentTimeMillis();
+        HelloWorldService helloWorldService = new HelloWorldService();
+        CompletableFutureHelloWorld completableFutureHelloWorld
+                = new CompletableFutureHelloWorld(helloWorldService);
+        completableFutureHelloWorld.helloString_with_ThenCompose()
+                .thenAccept(result -> {
+                    assertEquals("HELLO WORLD!",result);
+                }).join();
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time Taken::\t" + (endTime - startTime));
+    }
 }
