@@ -28,4 +28,31 @@ class CompletableFutureHelloWorldTest {
                     assertEquals("11 - hello world",result);
                 }).join();
     }
+
+    @Test
+    void helloWorld_with_multiple_async() {
+        HelloWorldService helloWorldService = new HelloWorldService();
+        CompletableFutureHelloWorld completableFutureHelloWorld
+                = new CompletableFutureHelloWorld(helloWorldService);
+        String result = completableFutureHelloWorld.helloWorld_with_multiple_async();
+        assertEquals("HELLO WORLD!", result);
+    }
+
+    @Test
+    void helloWorld_with_3_async() {
+        HelloWorldService helloWorldService = new HelloWorldService();
+        CompletableFutureHelloWorld completableFutureHelloWorld
+                = new CompletableFutureHelloWorld(helloWorldService);
+        String result = completableFutureHelloWorld.helloWorld_with_3_async();
+        assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE", result);
+    }
+
+    @Test
+    void helloWorld_with_4_async() {
+        HelloWorldService helloWorldService = new HelloWorldService();
+        CompletableFutureHelloWorld completableFutureHelloWorld
+                = new CompletableFutureHelloWorld(helloWorldService);
+        String result = completableFutureHelloWorld.helloWorld_with_4_async();
+        assertEquals("HELLO WORLD! HI COMPLETABLE FUTURE BYE!", result);
+    }
 }
