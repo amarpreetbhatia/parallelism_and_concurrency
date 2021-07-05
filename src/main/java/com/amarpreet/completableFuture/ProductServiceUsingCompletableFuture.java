@@ -32,6 +32,18 @@ class ProductServiceCompletableFuture {
         return product;
     }
 
+    public CompletableFuture<Product> retrieveProductDetails_approach2(String productId) {
+        stopWatch.start();
+        CompletableFuture<ProductInfo> completableFutureProductInfo = CompletableFuture.supplyAsync(() -> productInfoService.retrieveProductInfo(productId));
+        CompletableFuture<Review> completableFutureReview = CompletableFuture.supplyAsync(() -> reviewService.retrieveReviews(productId));
+        CompletableFuture<Product> product =
+                completableFutureProductInfo.thenCombine(completableFutureReview,
+                        (p,r) -> new Product(productId, p, r));
+        stopWatch.stop();
+        mylog("Total Time Taken : "+ stopWatch.getTime());
+        return product;
+    }
+
     public static void main(String[] args){
         ProductInfoService productInfoService = new ProductInfoService();
         ReviewService reviewService = new ReviewService();
