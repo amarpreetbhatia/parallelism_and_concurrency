@@ -97,8 +97,6 @@ class ProductServiceCompletableFuture {
                     });
                 })
                 .collect(Collectors.toList());
-
-
         return listOfProductOptions.stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
 
