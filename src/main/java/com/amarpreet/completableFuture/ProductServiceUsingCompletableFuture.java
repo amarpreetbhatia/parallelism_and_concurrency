@@ -44,10 +44,22 @@ class ProductServiceCompletableFuture {
     public CompletableFuture<Product> retrieveProductDetails_approach2(String productId) {
         long startTime = System.currentTimeMillis();
         CompletableFuture<ProductInfo> completableFutureProductInfo = CompletableFuture.supplyAsync(() -> productInfoService.retrieveProductInfo(productId));
-        CompletableFuture<Review> completableFutureReview = CompletableFuture.supplyAsync(() -> reviewService.retrieveReviews(productId));
+        CompletableFuture<Review> completableFutureReview = CompletableFuture
+                .supplyAsync(() -> reviewService.retrieveReviews(productId))
+                .exceptionally((e) ->{
+                    System.out.println("Review Service exception:: " + e.getMessage());
+                    return Review.builder().noOfReviews(0).overallRating(0.0).build();
+                });
+
         CompletableFuture<Product> product =
-                completableFutureProductInfo.thenCombine(completableFutureReview,
-                        (p,r) -> new Product(productId, p, r));
+                completableFutureProductInfo
+                        .thenCombine(completableFutureReview,
+                                (p,r) -> new Product(productId, p, r))
+                        .whenComplete((product1, ex) -> {
+                            System.out.println(" When Complete throws exception for " + product1
+                                    + " where exception message is " + ex.getMessage());
+                        });
+
         long endTime = System.currentTimeMillis();
         mylog("Total Time Taken : "+ (endTime - startTime));
         return product;
