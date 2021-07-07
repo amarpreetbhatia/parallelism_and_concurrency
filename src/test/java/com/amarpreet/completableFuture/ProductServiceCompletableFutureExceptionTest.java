@@ -1,6 +1,8 @@
 package com.amarpreet.completableFuture;
 
 import com.amarpreet.domain.Product;
+import com.amarpreet.domain.ProductInfo;
+import com.amarpreet.domain.ProductOption;
 import com.amarpreet.service.InventoryService;
 import com.amarpreet.service.ProductInfoService;
 import com.amarpreet.service.ReviewService;
@@ -11,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,5 +58,16 @@ public class ProductServiceCompletableFutureExceptionTest {
         Assertions.assertThrows(RuntimeException.class,() -> productServiceCompletableFuture
                 .retrieveProductDetails_approach2(productId).join());
 
+    }
+
+    @Test
+    void updateInventoryWithBetterPerformance(){
+        when(inventoryService.retrieveInventory(any())).thenThrow(new RuntimeException(" Throw Inventory Info Exception"));
+        List<ProductOption> productOptions =  productServiceCompletableFuture.updateInventoryWithBetterPerformance(
+                ProductInfo.builder().productId("ABC1234").productOptions(List.of(ProductOption.builder().price(100).build())).build());
+        assertNotNull(productOptions);
+       productOptions.forEach((productOption -> {
+          assertNotNull(productOption.getInventory());
+       }));
     }
 }

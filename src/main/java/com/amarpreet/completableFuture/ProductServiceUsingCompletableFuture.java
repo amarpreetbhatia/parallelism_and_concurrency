@@ -97,7 +97,7 @@ class ProductServiceCompletableFuture {
        return listOfProductOptions;
     }
 
-    private List<ProductOption> updateInventoryWithBetterPerformance(ProductInfo productInfo) {
+    public List<ProductOption> updateInventoryWithBetterPerformance(ProductInfo productInfo) {
         List<CompletableFuture<ProductOption>> listOfProductOptions = productInfo.getProductOptions()
                 .stream()
                 .map(productOption -> {
@@ -106,7 +106,11 @@ class ProductServiceCompletableFuture {
                             .thenApply(inventory -> {
                         productOption.setInventory(inventory);
                         return productOption;
-                    });
+                    })
+                           .exceptionally((e) -> {
+                               System.out.println("Exception raised for retrive inventory");
+                               return ProductOption.builder().inventory(Inventory.builder().count(0).build()).build();
+                           });
                 })
                 .collect(Collectors.toList());
         return listOfProductOptions.stream().map(CompletableFuture::join).collect(Collectors.toList());
