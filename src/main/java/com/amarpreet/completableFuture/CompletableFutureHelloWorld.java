@@ -2,6 +2,7 @@ package com.amarpreet.completableFuture;
 
 import com.amarpreet.service.HelloWorldService;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.amarpreet.util.CommonUtil.delay;
@@ -78,6 +79,41 @@ public class CompletableFutureHelloWorld {
 
         long endTime = System.currentTimeMillis();
         System.out.println("Time Taken ::\t" + (endTime - startTime));
+        return result;
+    }
+
+    public String anyOfExample(){
+        CompletableFuture<String> db = CompletableFuture.supplyAsync(() -> {
+            delay(1000);
+            System.out.println("Assume response from DB");
+            return helloWorldService.helloWorld();
+        });
+        CompletableFuture<String> restCall = CompletableFuture.supplyAsync(() -> {
+            delay(2000);
+            System.out.println("Assume response from REST Call");
+            return helloWorldService.helloWorld();
+        });
+
+        CompletableFuture<String> soapCall = CompletableFuture.supplyAsync(() -> {
+            delay(3000);
+            System.out.println("Assume response from SOAP Call");
+            return helloWorldService.helloWorld();
+        });
+
+        List<CompletableFuture<String>> cfList =  List.of(db,restCall,soapCall);
+
+        CompletableFuture<Object> cfAnyOf =
+                CompletableFuture
+                        .anyOf(cfList.toArray(new CompletableFuture[cfList.size()]));
+
+        String result = (String) cfAnyOf.thenApply(v -> {
+            if(v instanceof String){
+                return v;
+            }else {
+                return  null;
+            }
+        }).join();
+
         return result;
     }
 

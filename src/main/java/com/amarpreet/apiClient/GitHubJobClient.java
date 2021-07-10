@@ -6,6 +6,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public class GitHubJobClient {
@@ -43,5 +44,61 @@ public class GitHubJobClient {
         long endTime = System.currentTimeMillis();
         System.out.println("Time Taken:::" + (endTime - startTime));
         return gitHubPositions;
+    }
+
+    public List<GitHubPosition> invokeGitHubJobAPI_withMultiplePageNumber_approch2(List<Integer> pageNumbers,
+                                                                          String description){
+        long startTime = System.currentTimeMillis();
+        List<CompletableFuture<List<GitHubPosition>>> gitHubPositions = pageNumbers
+                .stream()
+                .map(pageNumber ->
+                        CompletableFuture
+                                .supplyAsync(() ->
+                                        invokeGitHubJobAPI_withPageNumber(
+                                                pageNumber,
+                                                description)))
+                .collect(Collectors.toList());
+
+
+        List<GitHubPosition> gitHubPositionList = gitHubPositions.stream()
+                .map(CompletableFuture::join)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time Taken:::" + (endTime - startTime));
+
+        return gitHubPositionList;
+    }
+
+
+    public List<GitHubPosition> invokeGitHubJobAPI_withMultiplePageNumber_approch3(List<Integer> pageNumbers,
+                                                                                   String description){
+        long startTime = System.currentTimeMillis();
+        List<CompletableFuture<List<GitHubPosition>>> gitHubPositions = pageNumbers
+                .stream()
+                .map(pageNumber ->
+                        CompletableFuture
+                                .supplyAsync(() ->
+                                        invokeGitHubJobAPI_withPageNumber(
+                                                pageNumber,
+                                                description)))
+                .collect(Collectors.toList());
+
+       CompletableFuture<Void> cfAll =  CompletableFuture
+                .allOf(gitHubPositions
+                        .toArray(new CompletableFuture[gitHubPositions.size()]));
+
+        List<GitHubPosition> gitHubPositionList = cfAll
+                .thenApply(v -> gitHubPositions.stream()
+                             .map(CompletableFuture::join)
+                             .flatMap(Collection::stream)
+                             .collect(Collectors.toList()))
+                .join();
+
+
+        long endTime = System.currentTimeMillis();
+        System.out.println("Time Taken:::" + (endTime - startTime));
+
+        return gitHubPositionList;
     }
 }

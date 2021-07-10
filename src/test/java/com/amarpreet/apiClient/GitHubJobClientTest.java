@@ -33,4 +33,26 @@ class GitHubJobClientTest {
         System.out.println("gitHubPositions" + gitHubPositions);
         assertTrue(gitHubPositions.isEmpty());
     }
+
+    @Test
+    void invokeGitHubJobAPI_withMultiplePageNumber_Apprach2(){
+        List<Integer> pageNumbers = List.of(1,2,3);
+        String description = "javascript";
+        List<GitHubPosition> gitHubPositions = gitHubJobClient
+                .invokeGitHubJobAPI_withMultiplePageNumber_approch2(
+                        pageNumbers, description);
+        System.out.println("gitHubPositions" + gitHubPositions);
+        assertTrue(gitHubPositions.isEmpty());
+    }
+
+    @Test
+    void invokeGitHubJobAPI_withMultiplePageNumber_Apprach3(){
+        List<Integer> pageNumbers = List.of(1,2,3);
+        String description = "javascript";
+        List<GitHubPosition> gitHubPositions = gitHubJobClient
+                .invokeGitHubJobAPI_withMultiplePageNumber_approch3(
+                        pageNumbers, description);
+        System.out.println("gitHubPositions" + gitHubPositions);
+        assertTrue(gitHubPositions.isEmpty());
+    }
 }

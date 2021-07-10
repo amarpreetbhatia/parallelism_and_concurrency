@@ -69,4 +69,13 @@ class CompletableFutureHelloWorldTest {
         long endTime = System.currentTimeMillis();
         System.out.println("Time Taken::\t" + (endTime - startTime));
     }
+
+    @Test
+    void anyOfExample(){
+        HelloWorldService helloWorldService = new HelloWorldService();
+        CompletableFutureHelloWorld completableFutureHelloWorld
+                = new CompletableFutureHelloWorld(helloWorldService);
+        String result = completableFutureHelloWorld.anyOfExample();
+        assertEquals("hello world", result);
+    }
 }
