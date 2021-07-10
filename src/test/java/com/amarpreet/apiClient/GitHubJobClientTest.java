@@ -23,4 +23,14 @@ class GitHubJobClientTest {
         assertTrue(gitHubPositions.isEmpty());
 
     }
+
+    @Test
+    void invokeGitHubJobAPI_withMultiplePageNumber(){
+        List<Integer> pageNumbers = List.of(1,2,3);
+        String description = "javascript";
+        List<GitHubPosition> gitHubPositions = gitHubJobClient
+                .invokeGitHubJobAPI_withMultiplePageNumber(pageNumbers, description);
+        System.out.println("gitHubPositions" + gitHubPositions);
+        assertTrue(gitHubPositions.isEmpty());
+    }
 }
