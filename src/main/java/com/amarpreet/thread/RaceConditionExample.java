@@ -41,18 +41,25 @@ public class RaceConditionExample {
         }
     }
     public static class InventoryCounter{
+        Object lock = new Object();
         private int items =0;
 
-        public synchronized void increment() {
-            items++;
+        public void increment() {
+            synchronized (lock){
+                items++;
+            }
         }
 
-        public synchronized void decrement() {
-            items--;
+        public void decrement() {
+            synchronized (lock) {
+                items--;
+            }
         }
 
-        public synchronized int getItems() {
-            return items;
+        public int getItems() {
+            synchronized(lock){
+                return items;
+            }
         }
     }
 }
