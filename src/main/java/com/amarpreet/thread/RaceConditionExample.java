@@ -7,8 +7,10 @@ public class RaceConditionExample {
         DecrementThread dt = new DecrementThread(ic);
 
         it.start();
-        it.join();
+//        it.join();
         dt.start();
+
+        it.join();
         dt.join();
         System.out.println("We currently have " + ic.getItems() + " items");
     }
